@@ -1,0 +1,33 @@
+{
+  "name": "@bolddesk/live-chat-web-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "live-chat",
+    "chat",
+    "web-sdk",
+    "bolddesk"
+  ],
+  "author": "",
+  "license": "MIT",
+  "main": "dist/live-chat-web-sdk.umd.js",
+  "module": "dist/live-chat-web-sdk.esm.js",
+  "types": "dist/live-chat-web-sdk.d.ts",
+  "scripts": {
+    "build": "rimraf dist && rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.4.0",
+    "rollup": "^2.78.1",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.9.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.4.0",
+    "typescript": "4.8.2",
+    "rimraf": "^3.0.2"
+  },
+  "files": [
+    "src",
+    "dist"
+  ]
+}
