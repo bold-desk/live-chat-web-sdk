@@ -1,15 +1,15 @@
 {
   "name": "@bolddesk/live-chat-web-sdk",
   "version": "1.0.0",
-  "description": "",
+  "description": "A lightweight JavaScript SDK for integrating BoldDesk Live Chat into web applications.",
   "keywords": [
     "live-chat",
     "chat",
     "web-sdk",
     "bolddesk"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Syncfusion Inc",
+  "license": "SEE LICENSE IN README.md",
   "main": "dist/live-chat-web-sdk.umd.js",
   "module": "dist/live-chat-web-sdk.esm.js",
   "types": "dist/live-chat-web-sdk.d.ts",
