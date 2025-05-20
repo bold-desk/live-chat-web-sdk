@@ -1,6 +1,6 @@
 {
   "name": "@bolddesk/live-chat-web-sdk",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "A lightweight JavaScript SDK for integrating BoldDesk Live Chat into web applications.",
   "keywords": [
     "live-chat",
@@ -24,6 +24,9 @@
     "url": "https://github.com/bold-desk/live-chat-web-sdk/issues"
   },
   "homepage": "https://github.com/bold-desk/live-chat-web-sdk#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.4.0",
     "rollup": "^2.78.1",
