@@ -1,15 +1,22 @@
 declare global {
   var $boldChat: any;
+  var boldChatSettings: {
+    email?: string;
+  };
 }
 
 /** Optional configuration for the live chat widget. */
 interface Options {
   /** The locale code (e.g., 'en-US', 'fr') used to load a localized version of the widget script.*/
   locale?: string;
+  /** The user's email address that will be automatically pre-configured in the chat widget, eliminating the need for manual entry. */
+  email?: string;
 }
 
 class LiveChat {
   private widgetScriptUrl: string = '';
+  /** Flag to track whether the chat widget script has already been injected into the DOM to prevent duplicate loading. */
+  private isScriptInjected: boolean = false;
 
   /**
    * Configures the live chat widget URL using the given widget and brand IDs and an optional locale.
@@ -23,6 +30,13 @@ class LiveChat {
     if (!widgetId || !brandUrl) {
       throw new Error(" Website ID and Brand ID should be set to configure bold chat")
     }
+
+    // Set email in boldChatSettings if provided
+    if (options.email?.trim() !== '') {
+      window.boldChatSettings = window.boldChatSettings || {};
+      window.boldChatSettings.email = options.email;
+    }
+
     this.widgetScriptUrl = `${brandUrl}/chatwidget-api/widget/v1/${widgetId}${options.locale ? `?culture=${options.locale}` : ''}`;
     this.load();
   }
@@ -31,6 +45,11 @@ class LiveChat {
    * Injects the chat widget script into the document head. Defers to deferredLoading if head is unavailable.
    */
   private load(): void {
+    // Prevents the live chat widget from being rendered multiple times.
+    if (this.isScriptInjected) {
+      return;
+    }
+
     const head = document.getElementsByTagName("head");
     if (!head || !head[0]) {
       this.deferredLoading();
@@ -40,6 +59,7 @@ class LiveChat {
     script.src = this.widgetScriptUrl;
     script.async = true;
     head[0].appendChild(script);
+    this.isScriptInjected = true;
   }
 
   /** Ensures that the global $boldChat array is initialized. */
