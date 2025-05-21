@@ -137,7 +137,7 @@ class LiveChat {
    *                   - `isValid`: indicates whether the conversation can be started (true if valid).
    *                   - `confirmationMessage` (optional): The message to be displayed to the user after validation, regardless of validity.
    */
-  public onValidateForm(callback: (formData: { apiName: string, value: string }[]) => { isValid: boolean, confirmationMessage?: string }): void {
+  public onValidateForm(callback: (formData: { apiName: string, value: string }[]) => { isValid: boolean, confirmationMessage?: string } | Promise<{ isValid: boolean; confirmationMessage?: string }>): void {
     this.initializeChatData();
     window.$boldChat.push(["on:validateForm", callback]);
   }
