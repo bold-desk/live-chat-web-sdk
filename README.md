@@ -4,14 +4,7 @@ The **BoldDesk Live Chat Web SDK** enables seamless integration of the BoldDesk 
 
 ## 📘 Documentation
 
-👉 Visit the [BoldDesk Support Portal](https://support.bolddesk.com/kb/article/20143) for complete setup guides and API references.
-
----
-
-## 🙌 Credits
-
-BoldDesk Live Chat Web SDK is developed and maintained by [BoldDesk by Syncfusion](https://www.bolddesk.com).
-Need help? [Contact Support](https://support.bolddesk.com) or start a chat on [bolddesk.com](https://www.bolddesk.com).
+👉 Visit the [BoldDesk Support Portal](https://support.bolddesk.com/kb/article/20221) for complete setup guides and API references.
 
 ---
 
