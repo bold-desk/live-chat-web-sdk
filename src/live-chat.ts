@@ -2,6 +2,9 @@ declare global {
   var $boldChat: any;
   var boldChatSettings: {
     email?: string;
+    userToken?: string;
+    isConversationVerified?: boolean;
+    isSessionVerified?: boolean;
   };
 }
 
@@ -11,6 +14,8 @@ interface Options {
   locale?: string;
   /** The user's email address that will be automatically pre-configured in the chat widget, eliminating the need for manual entry. */
   email?: string;
+  /** The user's userToken that will be automatically pre-configured in the chat widget, useful when performing conversation or session verification */
+  userToken?: string;
 }
 
 class LiveChat {
@@ -32,9 +37,15 @@ class LiveChat {
     }
 
     // Set email in boldChatSettings if provided
-    if (options.email?.trim() !== '') {
+    if (options.email?.trim()) {
       window.boldChatSettings = window.boldChatSettings || {};
       window.boldChatSettings.email = options.email;
+    }
+
+    // Set userToken in boldChatSettings if provided
+    if (options.userToken?.trim()) {
+      window.boldChatSettings = window.boldChatSettings || {};
+      window.boldChatSettings.email = options.userToken;
     }
 
     this.widgetScriptUrl = `${brandUrl}/chatwidget-api/widget/v1/${widgetId}${options.locale ? `?culture=${options.locale}` : ''}`;
@@ -151,6 +162,118 @@ class LiveChat {
   public onMoreOptionClick(callback: (event: { name: string }) => void): void {
     this.initializeChatData();
     window.$boldChat.push(["on:moreOptionClick", callback]);
+  }
+
+/** Navigates the chat widget to a specific section.
+ * @param section - The section identifier to open (e.g., 'home', 'chat', 'help').
+ */
+  public openSection(section: string): void {
+    this.initializeChatData();
+    window.$boldChat.push(["do:openSection", section]);
+  }
+
+  /**
+   * Verifies the current conversation by validating the user's identity with the backend.
+   * @param options - An object containing:
+   *                  - `email` (optional): The user's email address.
+   *                  - `userToken` (optional): A token used to verify the user.
+   *                  - `callback`: A function invoked with the verification result:
+   *                    - `isVerified`: Whether verification was successful.
+   *                    - `message`: A status or error message from the server.
+   */
+  public verifyConversation(options: { email?: string, userToken?: string, callback: (response: { isVerified: boolean, message: string }) => void }): void {
+    this.initializeChatData();
+    window.$boldChat.push(["do:verifyConversation", options]);
+  }
+
+  /**
+   * Verifies the current session by validating the user's identity with the backend.
+   * @param options - An object containing:
+   *                  - `email` (optional): The user's email address.
+   *                  - `userToken` (optional): A token used to verify the session.
+   *                  - `callback`: A function invoked with the verification result:
+   *                    - `isVerified`: Whether verification was successful.
+   *                    - `message`: A status or error message from the server.
+   */
+  public sessionVerification(options: { email?: string, userToken?: string, callback: (response: { isVerified: boolean, message: string }) => void }): void {
+    this.initializeChatData();
+    window.$boldChat.push(["do:sessionVerification", options]);
+  }
+
+  /**
+   * Registers a callback to validate the user's email before it is submitted in the chat widget.
+   * This is triggered when the user enters and submits their email in the pre-chat form.
+   * @param callback - A function that receives the submitted email string and returns:
+   *                   - `isValid`: Whether the email should be accepted.
+   *                   - `confirmationMessage` (optional): A message to show the user after validation.
+   *                   Can return a plain object or a Promise for async validation.
+   */
+  public onBeforeEmailSubmit(callback: (email: string) => { isValid: boolean, confirmationMessage?: string } | Promise<{ isValid: boolean; confirmationMessage?: string }>): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:beforeEmailSubmit", callback]);
+  }
+
+  /**
+   * Registers a callback triggered whenever the count of unread conversations changes.
+   * @param callback - A function that receives the updated unread message count as a number.
+   */
+  public onUnreadConversationCountChanged(callback: (msgCount: number) => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:unreadConversationCountChanged", callback]);
+  }
+
+  /**
+   * Registers a callback triggered when a new conversation is started.
+   * @param callback - A function that receives the ID of the newly started conversation.
+   */
+  public onConversationStarted(callback: (conversationID: string) => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:conversationStarted", callback]);
+  }
+
+  /**
+   * Registers a callback triggered when an ongoing conversation is closed.
+   * @param callback - A function that receives the ID of the closed conversation.
+   */
+  public onConversationClosed(callback: (conversationID: string) => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:conversationClosed", callback]);
+  }
+
+  /**
+   * Registers a callback triggered when the chat client successfully connects to the chat server.
+   * @param callback - A function called with no arguments when the connection is established.
+   */
+  public onChatServerConnected(callback: () => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:chatServerConnected", callback]);
+  }
+
+  /**
+   * Registers a callback triggered when the chat client disconnects from the chat server.
+   * @param callback - A function called with no arguments when the connection is lost.
+   */
+  public onChatServerDisconnected(callback: () => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:chatServerDisconnected", callback]);
+  }
+
+  /**
+   * Registers a callback triggered when the chat widget is opened by the user.
+   * @param callback - A function called with no arguments when the widget opens.
+   */
+  public onWidgetOpened(callback: () => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:widgetOpened", callback]);
+  }
+
+  /**
+   * Registers a callback triggered when the chat widget is closed by the user.
+   * @param callback - A function called with no arguments when the widget closes.
+   */
+  public onWidgetClosed(callback: () => void): void {
+    this.initializeChatData();
+    window.$boldChat.push(["on:widgetClosed", callback]);
   }
 }
 
